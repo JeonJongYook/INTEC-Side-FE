@@ -1,0 +1,95 @@
+<template>
+  <div>
+    <h2>Happy<br>Independence<br>Day</h2>
+  </div>
+</template>
+
+<script setup lang="ts">
+function circle() {
+  let amount = 100;
+  let body = document.querySelector("div");
+  let i = 0;
+  while(i < amount){
+    let element = document.createElement('i');
+    let posX = Math.floor(Math.random() * window.innerWidth);
+    let delay = Math.random() * -20;
+    let duration = Math.random() * 10;
+
+    let size = Math.random() * 250;
+    element.style.width = 10 + size + 'px';
+    element.style.height = 10 + size + 'px';
+    element.style.left = posX + 'px';
+    element.style.animationDelay = delay + 's';
+    element.style.animationDuration = 5 + duration + 's';
+    element.style.boxShadow = "0 30px 50px #0002";
+    body?.appendChild(element);
+    i++
+  }
+}
+circle()
+</script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Akaya+Telivigala&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+template {
+  height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+h2 {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  width: 100%;
+  font-size: 12vw;
+  line-height: 1em;
+  font-weight: 800;
+  color: #333;
+  text-transform: uppercase;
+}
+i {
+  position: absolute;
+  display: block;
+  background: #000;
+  border-radius: 50%;
+  animation: animate 5s linear infinite;
+}
+@keyframes animate {
+  0%
+  {
+    transform: translateY(calc(100vh + 350px));
+  }
+  100%
+  {
+    transform: translateY(-300px);
+  }
+}
+
+i:nth-child(5n+1) {
+  background: #fff;
+}
+i:nth-child(5n+2) {
+  background: #ffb03c;
+}
+i:nth-child(5n+3) {
+  background: #fff;
+  border: 5px solid #ff9933;
+}
+i:nth-child(5n+4) {
+  background: #2bd11b;
+}
+i:nth-child(5n+5) {
+  background: #fff;
+  border: 5px solid #2bd11b;
+}
+
+
+</style>
