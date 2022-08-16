@@ -1,64 +1,63 @@
 <script setup lang="ts">
-// 녹음중 상태 변수
-let isRecording = false;
+import { ref } from "vue";
 
-// MediaRecorder 변수 생성
-let mediaRecorder: any = null;
+let isRecording = ref(false);
 
-// 녹음 데이터 저장 배열
+let mediaRecorder: MediaRecorder | null = null;
 const audioArray: any = [];
+let mediaStream: MediaStream;
+let audioElement: HTMLAudioElement | null = document.querySelector("audio");
 
-let audioEl = document.querySelector("audio");
+const recordButtonClickHandler = async () => {
+  mediaStream = await navigator.mediaDevices.getUserMedia({
+    audio: true,
+  });
 
-const btnClickHandler = async (event: any) => {
-  if(!isRecording){
+  mediaRecorder = new MediaRecorder(mediaStream);
 
-    const mediaStream = await navigator.mediaDevices.getUserMedia({audio: true});
+  mediaRecorder.ondataavailable = (event: BlobEvent) => {
+    audioArray.push(event.data);
+  };
 
-    mediaRecorder = new MediaRecorder(mediaStream);
+  mediaRecorder.onstop = (event: any) => {
+    const blob = new Blob(audioArray, { type: "audio/ogg codecs=opus" });
+    audioArray.splice(0);
 
-    mediaRecorder.ondataavailable = (event:any)=>{
-      audioArray.push(event.data);
+    const blobURL = window.URL.createObjectURL(blob);
+    if (audioElement) {
+      audioElement.src = blobURL;
+      audioElement.play();
     }
+  };
 
-    mediaRecorder.onStop = (event:any)=>{
+  mediaRecorder.start();
+  isRecording.value = true;
+};
 
-      const blob = new Blob(audioArray, {"type": "audio/ogg codecs=opus"});
-      audioArray.splice(0);
-
-      const blobURL = window.URL.createObjectURL(blob);
-
-      audioEl.src = blobURL;
-      audioEl.play();
-    }
-
-    // 녹음 시작
-    mediaRecorder.start();
-    isRecording = true;
-
-  }else{
-    // 녹음 종료
-    mediaRecorder.stop();
-    isRecording = false;
+const onStopButtonClicked = async () => {
+  if (mediaStream && isRecording.value) {
+    mediaStream.getTracks().forEach((track) => track.stop());
   }
-}
+  isRecording.value = false;
+};
 </script>
 
 <template>
-<!--  Clean Code Failed -->
-<!--  <h1>Audio Recorder</h1>-->
-<!--  <div style="max-width: 28em; text-align: center; justify-content: center">-->
-<!--    <div id="controls">-->
-<!--      <button id="recordButton">Record</button>-->
-<!--      <button id="stopButton" disabled>Stop</button>-->
-<!--    </div>-->
-<!--    <h3>Recordings List</h3>-->
-<!--    <ol id="recordingsList"></ol>-->
-<!--  </div>-->
-  <button @click="">시작/종료</button>
-  <br><br>
-  <audio controls>녹음된 소리를 재생할 audio 엘리먼트</audio>
+  <h1>Audio Recorder</h1>
+  <div>
+    <div id="controls">
+      <button v-if="isRecording" id="stopButton" @click="onStopButtonClicked">
+        Stop
+      </button>
+      <button v-else id="recordButton" @click="recordButtonClickHandler">
+        Record
+      </button>
+    </div>
+    <h3>Recordings List</h3>
+    <ol id="recordingsList"></ol>
+  </div>
+  <br /><br />
+  <audio>녹음된 소리를 재생할 audio 엘리먼트</audio>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
