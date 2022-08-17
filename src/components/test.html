@@ -1,6 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>마이크 테스트</title>
+</head>
+
 <body>
-<input type=checkbox id="chk-hear-mic">
-<label for="chk-hear-mic">마이크 소리 듣기</label>
+<input type=checkbox id="chk-hear-mic"><label for="chk-hear-mic">마이크 소리 듣기</label>
 <button id="record">녹음</button>
 <button id="stop">정지</button>
 <div id="sound-clips"></div>
@@ -13,18 +20,18 @@
     const audioCtx = new(window.AudioContext || window.webkitAudioContext)() // 오디오 컨텍스트 정의
 
     const analyser = audioCtx.createAnalyser()
-    const distortion = audioCtx.createWaveShaper()
-    const gainNode = audioCtx.createGain()
-    const biquadFilter = audioCtx.createBiquadFilter()
+    //        const distortion = audioCtx.createWaveShaper()
+    //        const gainNode = audioCtx.createGain()
+    //        const biquadFilter = audioCtx.createBiquadFilter()
 
     function makeSound(stream) {
         const source = audioCtx.createMediaStreamSource(stream)
 
         source.connect(analyser)
-        analyser.connect(distortion)
-        distortion.connect(biquadFilter)
-        biquadFilter.connect(gainNode)
-        gainNode.connect(audioCtx.destination) // connecting the different audio graph nodes together
+        //            analyser.connect(distortion)
+        //            distortion.connect(biquadFilter)
+        //            biquadFilter.connect(gainNode)
+        //            gainNode.connect(audioCtx.destination) // connecting the different audio graph nodes together
         analyser.connect(audioCtx.destination)
 
     }
@@ -86,8 +93,6 @@
                     clipContainer.appendChild(clipLabel)
                     clipContainer.appendChild(deleteButton)
                     soundClips.appendChild(clipContainer)
-                    console.log(soundClips);
-
 
                     audio.controls = true
                     const blob = new Blob(chunks, {
@@ -95,7 +100,6 @@
                     })
                     chunks = []
                     const audioURL = URL.createObjectURL(blob)
-                    console.log(audioURL);
                     audio.src = audioURL
                     console.log("recorder stopped")
 
@@ -103,14 +107,7 @@
                         evtTgt = e.target
                         evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode)
                     }
-
-
-
-
-
-
                 }
-
                 mediaRecorder.ondataavailable = e => {
                     chunks.push(e.data)
                 }
@@ -120,5 +117,3 @@
             })
     }
 </script>
-</body>
-</html>
