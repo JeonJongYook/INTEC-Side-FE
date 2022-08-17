@@ -1,0 +1,15 @@
+<template>
+  <h3>CanvasView</h3>
+  <label for="attack">Attack</label>
+  <input name="attack" id="attack" type="range" min="0" max="1" value="0.2" step="0.1" />
+  <label for="release">Release</label>
+  <input name="release" id="release" type="range" min="0" max="1" value="0.5" step="0.1" />
+</template>
+
+<script>
+
+</script>
+
+<style scoped>
+
+</style>
