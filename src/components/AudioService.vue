@@ -119,28 +119,6 @@ const audioStopHandler = async () => {
   <br /><br />
   <audio id="AudioElement">녹음된 소리를 재생할 audio 엘리먼트</audio>
   <audio id="recordedAudio"></audio>
-  <br /><br />
-  <br /><br />
-  <br /><br />
-  <input type=checkbox id="chk-hear-mic"><label for="chk-hear-mic">마이크 소리 듣기</label>
-  <button id="record" @click="makeSound">녹음</button>
-  <button id="stop">정지</button>
-  <div id="sound-clips"></div>
-  <br /><br /><br /><br /><br />
-  <h1>Audio Recording Demo With WebAudioRecorder.js</h1>
-  <p><small>Made by the <a href="https://addpipe.com" target="_blank">Pipe Video Recording Platform</a></small></p>
-  <p>This demo shows you how to use <a href="https://github.com/higuma/web-audio-recorder-js" target="_blank">WebAudioRecorder.js</a> - a JavaScript library written in 2015 by higuma - to record audio and encode to common formats (pcm, Vorbis, mp3) directly in the browser.</p>
-  <p>Check out the <a href="https://github.com/addpipe/simple-web-audio-recorder-demo" target="_blank">code on GitHub</a> and our <a href="https://addpipe.com/blog/using-webaudiorecorder-js-to-record-audio-on-your-website/" target="_blank">blog post on using WebAudioRecorder.js to Record MP3, Vorbis and WAV Audio</a>.</p>
-    <div id="controls">
-      <button id="recordButton">Record</button>
-      <button id="stopButton" disabled>Stop</button>
-    </div>
-    <div id="formats"></div>
-    <pre>Log</pre>
-    <pre id="log"></pre>
-
-    <pre>Recordings</pre>
-    <ol id="recordingsList"></ol>
 </template>
 <style scoped>
 button {
