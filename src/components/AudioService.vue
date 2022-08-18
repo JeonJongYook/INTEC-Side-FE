@@ -5,12 +5,12 @@ let isRecording = ref(false);
 let mediaRecorder: MediaRecorder | null = null;
 const audioArray: any = [];
 let mediaStream: MediaStream;
-const audioElement: HTMLAudioElement | null = document.querySelector("audio");
-// const recordedAudio: HTMLElement | null = document.getElementById("recordedAudio");
+let audioElement: HTMLAudioElement | null;
+
 const audio = new Audio("test.mp3");
 
-// const AudioContext = window.AudioContext;
 const audioCtx = new AudioContext();
+
 
 const recordButtonClickHandler = async () => {
   try {
@@ -21,25 +21,19 @@ const recordButtonClickHandler = async () => {
     mediaRecorder = new MediaRecorder(mediaStream);
     mediaRecorder.ondataavailable = (event: BlobEvent) => {
       audioArray.push(event.data);
-      // console.log(audioArray);
       console.log(event.data);
     };
     mediaRecorder.onstop = (event: any) => {
-      const blob = new Blob(audioArray, { type: "audio/webm;codecs=opus" });
-      // audioArray.splice(0);
+      const blob = new Blob(audioArray,{ type: "audio/webm;codecs=opus" });
       const blobURL = window.URL.createObjectURL(blob);
-      console.log(blobURL);
+      audioElement = document.querySelector("audio");
+
       if (audioElement) {
-        console.log(blobURL);
-        console.log("recorder stopped");
         audioArray.splice(0);
-        const playAudio = new Audio(blobURL);
-        // audioElement.src = blobURL;
-        // audioElement.play();
-        playAudio.play();
+        audioElement.src = blobURL;
+        audioElement.play();
+        console.log(blobURL);
       }
-      // const buffer = new ArrayBuffer(length);
-      // return new Blob([buffer], {type: "audio/mp3"});
     };
     mediaRecorder.start();
     isRecording.value = true;
@@ -47,31 +41,14 @@ const recordButtonClickHandler = async () => {
   } catch (e) {
     console.error(e);
   }
-  // mediaStream = await navigator.mediaDevices.getUserMedia({
-  //   audio: true,
-  // });
-  // mediaRecorder = new MediaRecorder(mediaStream);
-  // mediaRecorder.ondataavailable = (event: BlobEvent) => {
-  //   audioArray.push(event.data);
-  // };
-  // mediaRecorder.onstop = (event: any) => {
-  //   const blob = new Blob(audioArray, { type: "audio/webm;codecs=opus" });
-  //   audioArray.splice(0);
-  //   const blobURL = window.URL.createObjectURL(blob);
-  //   if (audioElement) {
-  //     audioElement.src = blobURL;
-  //     audioElement.play();
-  //   }
-  // };
-  // mediaRecorder.start();
-  // isRecording.value = true;
 };
+
 const onStopButtonClicked = async () => {
-  console.log("Stop Button Clicked.");
-  if (mediaStream && isRecording.value) {
-    mediaStream.getTracks().forEach((track) => track.stop());
-  }
-  isRecording.value = false;
+    console.log("Stop Button Clicked.");
+    if (mediaStream && isRecording.value) {
+      mediaStream.getTracks().forEach((track) => track.stop());
+    }
+    isRecording.value = false;
 };
 
 const audioPlayHandler = async () => {
@@ -117,8 +94,7 @@ const audioStopHandler = async () => {
     <ol id="recordingsList"></ol>
   </div>
   <br /><br />
-  <audio id="AudioElement">녹음된 소리를 재생할 audio 엘리먼트</audio>
-  <audio id="recordedAudio"></audio>
+  <audio controls="" id="AudioElement" src="{{ blobURL }}">녹음된 소리를 재생할 audio 엘리먼트</audio>
 </template>
 <style scoped>
 button {
